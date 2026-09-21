@@ -251,8 +251,8 @@ def get_response(user_input, user_id="default"):
 # Hostel Data
 boys_hostels = [
     {"name": "Paari Hostel (AC)", "rooms": 50, "members_per_room": 2, "ac": True, "hostel_fees": 10000, "mess_fees": 20000},
-    {"name": "Kaari Hostel (AC)", "rooms": 40, "members_per_room": 2, "ac": True, "hostel_fees": 10000, "mess_fees": 20000},
-    {"name": "Oori Hostel (Non-AC)", "rooms": 60, "members_per_room": 3, "ac": False, "hostel_fees": 8000, "mess_fees": 20000},
+    {"name": "Kkkk Hostel (AC)", "rooms": 40, "members_per_room": 2, "ac": True, "hostel_fees": 10000, "mess_fees": 20000},
+    {"name": "aaaa Hostel (Non-AC)", "rooms": 60, "members_per_room": 3, "ac": False, "hostel_fees": 8000, "mess_fees": 20000},
     {"name": "Adhiyaman Hostel (Non-AC)", "rooms": 55, "members_per_room": 3, "ac": False, "hostel_fees": 8000, "mess_fees": 20000},
     {"name": "Marutham Hostel (Non-AC)", "rooms": 45, "members_per_room": 4, "ac": False, "hostel_fees": 8000, "mess_fees": 20000}
 ]
@@ -262,7 +262,7 @@ girls_hostels = [
     {"name": "Kalpana Hostel (AC)", "rooms": 35, "members_per_room": 2, "ac": True, "hostel_fees": 10000, "mess_fees": 20000},
     {"name": "Sneha Hostel (Non-AC)", "rooms": 50, "members_per_room": 3, "ac": False, "hostel_fees": 8000, "mess_fees": 20000},
     {"name": "Priya Hostel (Non-AC)", "rooms": 55, "members_per_room": 3, "ac": False, "hostel_fees": 8000, "mess_fees": 20000},
-    {"name": "Ruthra Hostel (Non-AC)", "rooms": 45, "members_per_room": 4, "ac": False, "hostel_fees": 8000, "mess_fees": 20000}
+    {"name": "cccc Hostel (Non-AC)", "rooms": 45, "members_per_room": 4, "ac": False, "hostel_fees": 8000, "mess_fees": 20000}
 ]
 
 # Admission dates
@@ -287,7 +287,7 @@ campus_life = {
     },
     "cultural": {
         "details": (
-            "🎭 SRM Institude Of Technology (AIT)hosts vibrant cultural events and annual fests that bring together students from all campuses.<br><br>"
+            "🎭 SRM Institude Of Technology hosts vibrant cultural events and annual fests that bring together students from all campuses.<br><br>"
             "📌 Major Cultural Events:<br>"
             "• Milan – Annual cultural extravaganza with music, dance, and theatre.<br>"
             "• Rubaroo – Freshers cultural night.<br>"
