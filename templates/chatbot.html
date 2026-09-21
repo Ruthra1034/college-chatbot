@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Admission Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: url("{{ url_for('static', filename='bg.jpeg') }}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .chat-container {
+      width: 60%;
+      max-width: 700px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .chat-header h2 { margin: 0; font-size: 20px; font-weight: bold; }
+    .logout-btn {
+      background: #dc3545; color: #fff; padding: 6px 12px;
+      border-radius: 5px; text-decoration: none; font-size: 14px;
+    }
+#chat-box {
+  height: 400px;               /* fixed height */
+  max-height: 400px;           /* no more growing */
+  overflow-y: auto;            /* vertical scroll */
+  overflow-x: hidden;          /* no sideways scroll */
+  border: 1px solid #ccc;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 15px;
+
+  /* remove flex here */
+  display: block;
+}
+    .user-msg { background: #007bff; color: white; align-self: flex-end;
+      padding: 10px 15px; border-radius: 18px 18px 5px 18px; max-width: 75%; }
+    .bot-msg { background: #e6e6e6; color: #333; align-self: flex-start;
+      padding: 10px 15px; border-radius: 18px 18px 18px 5px; max-width: 75%; }
+    .input-area { display: flex; align-items: center; gap: 10px; }
+    .input-area input {
+      flex: 1; padding: 12px; border: 1px solid #ccc;
+      border-radius: 25px; outline: none; font-size: 15px;
+    }
+    .input-area button {
+      width: 45px; height: 45px; border: none; border-radius: 50%;
+      cursor: pointer; background: #f1f1f1; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .input-area button i { color: #000; font-size: 18px; }
+    .mic-btn.listening i { color: red; }
+    .speak-btn.speaking i { color: green; }
+   
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>College Admission Chatbot</h2>
+      <a href="{{ url_for('exit_page') }}" class="logoutt-btn">Exit</a>
+    </div>
+
+    <div id="chat-box" class="chat-box"></div>
+
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Ask me something about admissions...">
+      <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+      <button class="mic-btn" onclick="toggleMic()"><i class="fas fa-microphone"></i></button>
+      <button class="speak-btn" onclick="toggleSpeak()"><i class="fas fa-volume-up"></i></button>
+    </div>
+  </div>
+
+  <script>
+    let recognizing = false, recognition
+    let synth = window.speechSynthesis;
+    let speaking = false, lastReply = "";
+
+    if ("webkitSpeechRecognition" in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+      recognition.onstart = () => {
+        recognizing = true;
+        document.querySelector(".mic-btn").classList.add("listening");
+      };
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("user-input").value = transcript;
+        sendMessage();
+      };
+      recognition.onend = () => {
+        recognizing = false;
+        document.querySelector(".mic-btn").classList.remove("listening");
+      };
+    }
+
+    function toggleMic() {
+      if (!recognition) return;
+      if (recognizing) recognition.stop(); else recognition.start();
+    }
+
+    function toggleSpeak() {
+      let btn = document.querySelector(".speak-btn");
+      if (synth.speaking) {
+        synth.cancel(); speaking = false; btn.classList.remove("speaking"); return;
+      }
+      if (!lastReply.trim()) { alert("No reply to read!"); return; }
+      let speech = new SpeechSynthesisUtterance(lastReply);
+      speech.lang = "en-IN"; speech.rate = 1;
+      speaking = true; btn.classList.add("speaking"); synth.speak(speech);
+      speech.onend = () => { speaking = false; btn.classList.remove("speaking"); };
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const chatWindow = document.getElementById("chat-box");
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+      const userDiv = document.createElement("div");
+      userDiv.className = "user-msg"; userDiv.textContent = userMessage;
+      chatWindow.appendChild(userDiv);
+      const botDiv = document.createElement("div");
+      botDiv.className = "bot-msg"; botDiv.textContent = "Typing...";
+      chatWindow.appendChild(botDiv);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+
+      try {
+        const response = await fetch("/chat", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userMessage })
+        });
+        const data = await response.json();
+        botDiv.innerHTML = data.reply.replace(/\n/g, "<br>");
+        lastReply = botDiv.innerText;
+      } catch {
+        botDiv.textContent = "⚠️ Server error. Please try again later.";
+      }
+      chatWindow.scrollTop = chatWindow.scrollHeight; input.value = "";
+    }
+
+    document.getElementById("user-input").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); sendMessage(); }
+    });
+      document.getElementById("exitBtn").addEventListener("click", function(event) {
+      event.preventDefault();
+      if (recognition && recognizing) recognition.stop();
+      if (synth.speaking) synth.cancel();
+      window.location.href = "index.html"; // go to home
+  });
+</script>
+</body>
+</html>

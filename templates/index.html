@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRM Institute of Science and Technology</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: url("{{ url_for('static', filename='bg.jpeg') }}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .home-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 90%;
+    }
+    h1 {
+      margin-bottom: 10px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    p {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .contact {
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+    .btn-start {
+  background: #36a5d8;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+ .start-chat-btn:hover {
+            background-color: #0056b3;
+ }
+  </style>
+</head>
+<body>
+  <div class="home-container">
+    <h1>SRM Institute of Science and Technology</h1>
+    <p>Your virtual admission assistant for courses, fees, and guidance.</p>
+    <p>📞 Contact us: +91 98765 43210</p>
+    <a href="/chatbot" class="btn">💬 Start Chat</a>
+  </div>
+</body>
+</html>
